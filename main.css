@@ -44,10 +44,14 @@ a {
     color: #1F3F96;
 }
 
-#jostle:hover {
+#boost:hover {
     text-decoration: underline;
 }
 
 #translate:hover {
     text-decoration: underline;
+}
+
+.padding {
+    color: #EEE;
 }
