@@ -55,19 +55,19 @@ function draw() {
 
 //Trio of functions to create colored circles
 function createRed() {
-    var pos = randomSpawn();
+    var pos = randomSpawn(30);
 
-    objects.push(new Circle(pos.x, pos.y, 40, unhex(["A3", "14", "11"])));
+    objects.push(new Circle(pos.x, pos.y, 60, unhex(["A3", "14", "11"])));
 }
 function createGreen() {
-    var pos = randomSpawn();
+    var pos = randomSpawn(30);
 
-    objects.push(new Circle(pos.x, pos.y, 40, unhex(["0B", "4F", "1A"])));
+    objects.push(new Circle(pos.x, pos.y, 60, unhex(["0B", "4F", "1A"])));
 }
 function createBlue() {
-    var pos = randomSpawn();
+    var pos = randomSpawn(30);
 
-    objects.push(new Circle(pos.x, pos.y, 40, unhex(["1F", "3F", "96"])));
+    objects.push(new Circle(pos.x, pos.y, 60, unhex(["1F", "3F", "96"])));
 }
 
 function boostUpward(force) {
@@ -78,6 +78,10 @@ function boostUpward(force) {
 
 function translateCanvas(yTranslation) {
     
+    //Prevent the objects from tunneling
+    yTranslation = Math.min(yTranslation, 90)
+    yTranslation = Math.max(yTranslation, -100);
+
     if (yTranslation > 0) {
         boostUpward(yTranslation * -0.001);
     }
@@ -88,9 +92,9 @@ function translateCanvas(yTranslation) {
 }
 
 //A function that returns a random spawn point in the top half of the canvas
-function randomSpawn() {
-    var randX = random(20, width - 20);
-    var randY = random(20, (height / 2) - 20);
+function randomSpawn(buffer) {
+    var randX = random(buffer, width - buffer);
+    var randY = random(buffer, (height / 2) - buffer);
 
     return {
         x: randX,
