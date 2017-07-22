@@ -55,19 +55,25 @@ function draw() {
 
 //Trio of functions to create colored circles
 function createRed() {
-    var pos = randomSpawn(30);
+    var randomRadius = random(10, 40);
 
-    objects.push(new Circle(pos.x, pos.y, 60, unhex(["A3", "14", "11"])));
+    var pos = randomSpawn(randomRadius);
+
+    objects.push(new Circle(pos.x, pos.y, randomRadius * 2, unhex(["A3", "14", "11"])));
 }
 function createGreen() {
-    var pos = randomSpawn(30);
+    var randomRadius = random(10, 40);
 
-    objects.push(new Circle(pos.x, pos.y, 60, unhex(["0B", "4F", "1A"])));
+    var pos = randomSpawn(randomRadius);
+
+    objects.push(new Circle(pos.x, pos.y, randomRadius * 2, unhex(["0B", "4F", "1A"])));
 }
 function createBlue() {
-    var pos = randomSpawn(30);
+    var randomRadius = random(10, 40);
 
-    objects.push(new Circle(pos.x, pos.y, 60, unhex(["1F", "3F", "96"])));
+    var pos = randomSpawn(randomRadius);
+
+    objects.push(new Circle(pos.x, pos.y, randomRadius * 2, unhex(["1F", "3F", "96"])));
 }
 
 function boostUpward(force) {
