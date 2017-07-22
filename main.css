@@ -1,0 +1,46 @@
+* { 
+    padding: 0px;
+    margin: 0px;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+article {
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    float: left;
+}
+
+ul {
+    list-style: none;
+    font-size: 52px;
+    font-family: Courier New, Courier, monospace;
+    font-weight: 500;
+}
+
+a {
+    text-decoration: none;
+    color: #BBB;
+}
+
+#red:hover {
+    color: #A31411;
+}
+
+#green:hover {
+    color: #0B4F1A;
+}
+
+#blue:hover {
+    color: #1F3F96;
+}
