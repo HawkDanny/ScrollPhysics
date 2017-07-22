@@ -78,9 +78,9 @@ function boostUpward(force) {
 
 function translateCanvas(yTranslation) {
     
-    //Prevent the objects from tunneling
-    yTranslation = Math.min(yTranslation, 90)
-    yTranslation = Math.max(yTranslation, -100);
+    //Prevent the objects from tunneling, by keeping yTranslation between -90 and 90
+    yTranslation = Math.min(yTranslation, 75)
+    yTranslation = Math.max(yTranslation, -75);
 
     if (yTranslation > 0) {
         boostUpward(yTranslation * -0.001);
