@@ -14,7 +14,14 @@ function Circle(x, y, radius, color) {
 
         push();
         translate(pos.x, pos.y);
+        rotate(radians(this.body.angle));
         ellipse(0, 0, this.radius * 2);
+        stroke(51);
+        line(0, 0, 0, -this.radius);
         pop();
+    }
+
+    this.applyForce = function(position, force) {
+        Body.applyForce(this.body, position, force);
     }
 }

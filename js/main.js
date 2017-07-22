@@ -1,7 +1,9 @@
 //Aliases
 var Engine = Matter.Engine,
     World = Matter.World,
-    Bodies = Matter.Bodies;
+    Bodies = Matter.Bodies,
+    Body = Matter.Body,
+    Composite = Matter.Composite;
 
 //Global engine reference
 var engine;
@@ -10,7 +12,14 @@ var floor;
 
 var objects = [];
 
+//DOM element
+var article;
+var scrollPos;
+
 function setup() {
+    article = document.querySelector("article");
+    scrollPos = 0;
+
     //Make a canvas that is half of the window, TODO: Make it resize
     var cnv = createCanvas(window.innerWidth / 2, window.innerHeight);
     cnv.parent("sketchHolder");
@@ -21,16 +30,13 @@ function setup() {
 
     createBounds();
 
-    createHoverEffects();
+    createHTMLEvents();
 
     //Start the simulation that runs at 60 frames per second
     Engine.run(engine);
 }
 
-function mousePressed() {
-    objects.push(new Circle(mouseX, mouseY, 20));
-}
-
+//Called every frame
 function draw() {
     background(51);
     noStroke();
@@ -38,24 +44,47 @@ function draw() {
     for (var i = 0; i < objects.length; i++) {
         objects[i].show();
     }
+
+    if (scrollPos !== article.scrollTop) {
+
+        translateCanvas(scrollPos - article.scrollTop);
+        
+        scrollPos = article.scrollTop;
+    }
 }
 
+//Trio of functions to create colored circles
 function createRed() {
     var pos = randomSpawn();
 
-    objects.push(new Circle(pos.x, pos.y, 30, unhex(["A3", "14", "11"])));
+    objects.push(new Circle(pos.x, pos.y, 40, unhex(["A3", "14", "11"])));
 }
-
 function createGreen() {
     var pos = randomSpawn();
 
-    objects.push(new Circle(pos.x, pos.y, 30, unhex(["0B", "4F", "1A"])));
+    objects.push(new Circle(pos.x, pos.y, 40, unhex(["0B", "4F", "1A"])));
 }
-
 function createBlue() {
     var pos = randomSpawn();
 
-    objects.push(new Circle(pos.x, pos.y, 30, unhex(["1F", "3F", "96"])));
+    objects.push(new Circle(pos.x, pos.y, 40, unhex(["1F", "3F", "96"])));
+}
+
+function boostUpward(force) {
+    for (var i = 0; i < objects.length; i++) {
+        objects[i].applyForce(floor.position, {x: 0, y: force});
+    }
+}
+
+function translateCanvas(yTranslation) {
+    
+    if (yTranslation > 0) {
+        boostUpward(yTranslation * -0.001);
+    }
+
+    Composite.translate(world, {x: 0, y: yTranslation});
+
+    resetBorders();
 }
 
 //A function that returns a random spawn point in the top half of the canvas
@@ -76,6 +105,17 @@ function windowResized() {
     World.remove(world, leftWall);
     World.remove(world, rightWall);
     World.remove(world, floor);
+    World.remove(world, ceiling);
+
+    createBounds();
+}
+
+function resetBorders() {
+
+    World.remove(world, leftWall);
+    World.remove(world, rightWall);
+    World.remove(world, floor);
+    World.remove(world, ceiling);
 
     createBounds();
 }
@@ -83,17 +123,23 @@ function windowResized() {
 //Create the floor and walls out of static rectangles
 function createBounds() {
     //Floor
-    floor = Bodies.rectangle(width / 2, height + 10, width, 20, {isStatic: true});
+    floor = Bodies.rectangle(width / 2, height + 50, width, 100, {isStatic: true});
+
+    //Ceiling
+    ceiling = Bodies.rectangle(width / 2, -50, width, 100, {isStatic: true});
 
     //Walls
     leftWall = Bodies.rectangle(-10, height / 2, 20, height + 40, {isStatic: true});
     rightWall = Bodies.rectangle(width + 10, height / 2, 20, height + 40, {isStatic: true});
 
-    World.add(world, [floor, leftWall, rightWall]);
+    World.add(world, [floor, ceiling, leftWall, rightWall]);
 }
 
-function createHoverEffects() {
+//Called at setup to link canvas events to html Elements
+function createHTMLEvents() {
     document.querySelector("#red").addEventListener("mouseenter", createRed);
     document.querySelector("#green").addEventListener("mouseenter", createGreen);
     document.querySelector("#blue").addEventListener("mouseenter", createBlue);
+    document.querySelector("#boost").addEventListener("click", function() { boostUpward(-0.1); } );
+    document.querySelector("#translate").addEventListener("click", function() { translateCanvas(-100); } );
 }
